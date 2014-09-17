@@ -132,17 +132,17 @@ def mix_of_gaussians(image, theta):
     # mejor precalcular :)
 
     skin_factors = [ skin_w[i] / (((2.0 * np.pi)** (2.0/3.0)) *
-        np.sqrt(np.absolute(np.prod(skin_sigma[i]))))  for i in xrange(N) ]
+        np.sqrt(np.sum(skin_sigma[i]**2)))  for i in xrange(N) ]
 
     nonskin_factors = [ nonskin_w[i] / (((2.0 * np.pi)** (2.0/3.0)) *
-        np.sqrt(np.absolute(np.prod(nonskin_sigma[i]))))  for i in xrange(N) ]
+        np.sqrt(np.sum(nonskin_sigma[i]**2)))  for i in xrange(N) ]
 
     #for each px
     (y, x, fef) = image.shape
 
     for idx_i in xrange(x):
         for idx_j in xrange(y):
-            x = image[idx_j, idx_i].astype(np.float_)
+            x = image[idx_j, idx_i].astype(np.float_)[::-1]
 
             # Estos deberian ser, para cada i, los numeros que van en el
             # exponente :V
