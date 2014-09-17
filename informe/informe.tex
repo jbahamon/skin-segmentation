@@ -1,0 +1,301 @@
+\documentclass[12pt]{article}
+\usepackage{url}
+\usepackage[spanish, english]{babel}
+\selectlanguage{spanish}
+\usepackage[fixlanguage]{babelbib}
+\selectbiblanguage{spanish}
+\usepackage{url}
+\usepackage[utf8]{inputenc}
+\usepackage{float}
+\usepackage{fullpage}
+\usepackage{amsmath}
+\usepackage{graphicx}
+
+
+\usepackage[titletoc, title]{appendix}
+\addto{\captionsspanish}{\renewcommand*{\appendixname}{Anexo}}
+
+\bibliographystyle{bababbrv}
+
+\title{Clasificación de Dígitos Impresos: OCR}
+\author{Jorge Bahamonde\\
+\small{\url{jbahamon@ug.uchile.cl}}}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+    El reconocimiento y clasificación de caracteres impresos es un método
+    conocido para la digitalización de texto, de modo de poder realizar el
+    almacenamiento, búsqueda y otros análisis de mejor forma.  El estudio y
+    comparación de diferentes descriptores es necesario en un área en que
+    diversas variantes son propuestas en base a intuiciones. En particular, una
+    clase importante de descriptores está compuesta por aquellos basados en
+    nociones de concavidad. En este trabajo se estudiaron tres descriptores
+    basados en concavidad para el caso de la clasificación de dígitos impresos.
+    Se exploró (de forma limitada) el espacio de parámetros del clasificador
+    utilizado (KNN). Posteriormente, se analizó la extensión de los resultados
+    obtenidos en el caso de agregar mecanismos de división espacial en la
+    obtención de los descriptores, buscando comparar el comportamiento de éstos.
+\end{abstract}
+
+\section{Introducción}
+
+El reconocimiento de dígitos impresos es una aplicación del reconocimiento de
+patrones, siendo aplicable para el procesamiento de formularios y automatización
+de digitalización de documentos. En particular, la clasificación de dígitos
+impresos puede ayudar, por ejemplo, en la digitalización de documentos
+relacionados con contabilidad.
+
+Un paso importante en el proceso de clasificación es el de extracción de las
+características de las imágenes a clasificar, en la forma de descriptores.
+Existen múltiples técnicas para este propósito, siendo necesario el análisis y
+comparación de su desempeño. En particular, existe un conjunto de técnicas
+orientadas a describir imágenes en base a un modelamiento de sus propiedades de
+concavidad. Estos descriptores usualmente son utilizados como un complemento
+para otro tipo de descriptores \cite{conc}.
+
+Adicionalmente, una forma común de mejorar la efectividad de un descriptor es
+realizar la división espacial de la imagen a describir. Así, para cada zona
+creada se genera un descriptor, siendo la concatenación de todos éstos el
+descriptor global. Sin embargo, una consecuencia directa de esto es un
+incremento en el tamaño del descriptor.
+
+En este trabajo se estudiaron y compararon tres descriptores basados en
+conceptos de concavidad, en el contexto del reconocimiento de dígitos impresos.
+Además de explorar los parámetros utilizados al momento de la clasificación, se
+analizó el comportamiento observado al introducir mecanismos de división
+espacial. 
+
+\section{Descripción del Trabajo}
+
+Este trabajo se enfocó en la clasificación de dígitos impresos (es decir, no
+escritos a mano) utilizando imágenes binarizadas con un tamaño estándar, con
+dígitos negros sobre un fondo blanco.
+
+
+\subsection{Descriptores basados en concavidad}
+
+\subsubsection{Concavidad 4-Conexa (4CC)}
+
+Para este descriptor, cada pixel del fondo (es decir, blanco) de la imagen es
+codificado utilizando 4 bits. Para ello, se realiza una búsqueda de pixeles del
+dígito (pixeles negros) en las cuatro direcciones principales a partir del pixel
+de fondo, similar a los posibles movimientos de una torre en el ajedrez. 
+
+Cada dirección es representada por un bit, que se setea de acuerdo a si se
+encontró o no un pixel del dígito. Al formar un histograma con los códigos
+resultantes, se obtiene en un descriptor de largo 16. 
+
+\subsubsection{Concavidad 8-Conexa (8CC)}
+
+Este descriptor es similar al anterior; sin embargo, las direcciones utilizadas
+por la búsqueda son las diagonales, de manera similar a los posibles movimientos
+de un alfil en el ajedrez. De esta forma, el descriptor obtenido es también un
+histograma de largo 16.
+
+\subsubsection{Concavidad de 13 Bins (13C)}
+
+Este descriptor, definido en \cite{bins}, puede ser visto como una modificación
+de 4CC. Se realiza una búsqueda en las mismas direcciones, siendo ignorados
+aquellos casos en que se encuentran pixeles del dígito en una o menos
+direcciones. Adicionalmente, se ignoran aquellos pixeles que encuentran dos
+pixeles negros en el mismo eje (es decir, a la izquierda y a la derecha, o
+arriba y abajo), si bien esto no se explicita en la referencia original. 
+
+Adicionalmente, en el caso en que se encuentren pixeles negros en las cuatro
+direcciones, se realiza una búsqueda adicional en cuatro direcciones auxiliares,
+de modo de confirmar si el pixel blanco se encuentra totalmente rodeado o no.
+Esto resulta en un histograma con 13 compartimientos.
+
+Finalmente, en el caso de este trabajo, se utilizaron también versiones de estos
+algoritmos en las que previamente se divide la imagen en una grilla de $W \times
+W$ celdas, siendo el descriptor de la imagen total la concatenación de los
+descriptores para cada celda. Así, estas versiones resultan en descriptores de
+largo $W \times W \times 16$ en el caso de 4CC y 8CC, y de largo $W \times W
+\times 13$ en el caso de 13C. Estas versiones modificadas se utilizaron de forma
+posterior a la exploración de parámetros realizada.
+
+Todos estos descriptores fueron extraídos utilizando programas escritos en
+Python, utilizando la biblioteca OpenCV y NumPy.
+
+\subsection{Conjuntos de Datos}
+
+Se utilizó un conjunto de datos compuesto por imágenes de dígitos impresos en
+blanco y negro (binarizadas) de 128x128 pixeles. El conjunto de datos de
+entrenamiento se compuso de 7110 imágenes, 711 para cada dígito. No se utilizó
+un conjunto de validación.
+
+Por otro lado, el conjunto de datos de prueba se compuso de 3050 imágenes, 305
+para cada dígito. 
+
+\begin{figure}[h]
+    \centering
+    \includegraphics{digit}
+\caption{Ejemplo de las imágenes con las que se trabajó.}
+\end{figure}
+
+\subsection{Clasificación}
+
+El clasificador utilizado sobre los descriptores antes mencionados fue KNN
+(\emph{K-nearest neighbors}) utilizando dos funciones de distancia: Manhattan
+(L1) y Euclidiana (L2), que pueden ser vistas como casos particulares de la
+distancia de Minkowski, con $p=1$ y $p=2$, respectivamente. Para el parámetro
+$K$ del algoritmo, se uti:lizaron valores de 1, 5, 10 y 20, escogiéndose
+aquellos valores que produjeran los mejores resultados. Se utilizó la
+implementación del algoritmo KNN incluida en la biblioteca scikit-learn de
+Python.
+
+\section{Evaluación y Análisis de Resultados}
+
+\subsection{Resultados de los Experimentos}
+
+Se listan a continuación los resultados obtenidos. Se muestran los resultados
+correspondientes a los valores de $K$ que produjeron los mejores resultados para
+cada algoritmo. Se adjunta como anexo la totalidad de los resultados obtenidos,
+en la forma de matrices de confusión.
+
+Se define C$i$ como el porcentaje de clasificaciones correctas para el dígito
+$i$; además, se define CT como el porcentaje de clasificación total. La
+totalidad de los porcentajes de clasificación correcta para cada experimento se
+incluyen como anexo.
+
+\begin{table}[H]
+\begin{tabular}{|l|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+\textbf{Desc.}&\textbf{K}&\textbf{CT}&\textbf{C0}&\textbf{C1}&\textbf{C2}&\textbf{C3}&\textbf{C4}&\textbf{C5}&\textbf{C6}&\textbf{C7}&\textbf{C8}&\textbf{C9}\\
+\hline
+4CC&1&93.48&96.72&95.74&90.16&92.13&97.7&91.48&91.48&98.36&88.2&92.79\\
+\hline
+8CC&1&94.16&91.8&97.38&98.03&96.07&98.69&91.48&84.26&99.02&91.15&93.77\\
+\hline
+13C&1&97.21&97.38&96.72&95.41&98.36&97.7&96.39&99.02&99.34&93.44&98.36\\
+\hline
+\end{tabular}
+\caption{Porcentajes de clasificaciones correctas para distancia de Manhattan}
+\end{table}
+
+\begin{table}[H]
+\begin{tabular}{|l|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+\textbf{Desc.}&\textbf{K}&\textbf{CT}&\textbf{C0}&\textbf{C1}&\textbf{C2}&\textbf{C3}&\textbf{C4}&\textbf{C5}&\textbf{C6}&\textbf{C7}&\textbf{C8}&\textbf{C9}\\
+\hline
+4CC&1&92.72&94.75&95.41&87.87&90.82&96.39&91.48&91.8&98.69&87.54&92.46\\
+\hline
+8CC&1&93.51&89.84&96.07&97.38&94.75&98.03&91.15&84.26&99.02&90.49&94.1\\
+\hline
+13C&1&96.59&96.72&95.74&94.75&97.38&97.38&96.39&98.69&99.34&92.13&97.38\\
+\hline
+\end{tabular}
+\caption{Porcentajes de clasificaciones correctas para distancia Euclidiana}
+\end{table}
+
+De esta forma, se obtiene que los parámetros en que mejor se comportan los
+métodos (utilizando el porcentaje de clasificación total como criterio de
+decisión) corresponden al uso de $K=1$ para KNN, con la distancia de Manhattan
+como la más efectiva.
+
+Con estos parámetros, se realizaron experimentos utilizando división espacial
+mediante grillas de $2 \times 2$ y de $4 \times 4$ celdas, con lo que se tienen
+los descriptores 4CC-4, 4CC-16, 8CC-4, 8CC-16, 13C-4 y 13C-16. Estos
+descriptores tienen largos 64, 256, 64, 256, 52 y 208, respectivamente. Se
+presentan a continuación sus porcentajes de clasificaciones correctas. Las
+correspondientes matrices de confusión se encuentran en el anexo.
+
+\begin{table}[H]
+\begin{tabular}{|l|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+\textbf{Desc}&\textbf{CT}&\textbf{C0}&\textbf{C1}&\textbf{C2}&\textbf{C3}&\textbf{C4}&\textbf{C5}&\textbf{C6}&\textbf{C7}&\textbf{C8}&\textbf{C9}\\
+\hline
+4CC-4&98.33&99.67&97.38&98.36&97.05&98.36&99.34&98.36&99.02&98.03&97.7\\
+\hline
+8CC-4&97.44&98.69&98.69&98.69&94.75&99.02&97.38&94.43&99.67&96.39&96.72\\
+\hline
+13C-4&98.0&100.0&99.34&99.02&96.07&97.38&99.02&96.39&98.03&96.07&98.69\\
+\hline
+4CC-16&97.51&99.67&97.7&99.34&94.1&98.36&96.72&97.05&99.67&95.08&97.38\\
+\hline
+8CC-16&96.98&98.36&98.36&99.67&92.79&98.69&96.72&94.43&99.67&94.1&97.05\\
+\hline
+13C-16&97.18&99.67&97.38&98.36&95.08&98.36&97.7&95.41&98.69&94.1&97.05\\
+\hline\end{tabular}
+\caption{Porcentajes de clasificaciones correctas al usar división espacial}
+\end{table}
+
+Se obtiene, así, que la mejor tasa de reconocimiento total se tiene en el caso
+de 4CC-4, seguido de cerca por 13C-4.
+
+\subsection{Discusión}
+
+Es interesante que consistentemente se obtengan mejores resultados cuando el
+valor de K es igual a 1 (es decir, el clasificador es simplemente escoger al
+vecino más cercano). Es posible que en el caso de dígitos impresos exista una
+variabilidad limitada: de ser así, la inclusión de más vecinos puede significar
+forzar al clasificador a considerar una variabilidad que no está presente. Una
+forma de estudiar esta variabilidad podría consistir en reconocer clústers
+dentro de un conjunto de imágenes que correspondan a un mismo dígito, dados sus
+descriptores de concavidad. ***\emph{overfitting}
+
+A la hora de comparar los descriptores, el descriptor 13C tuvo un mejor
+desempeño (al menos un 3\% de mejora en los porcentajes de clasificaciones
+correctas totales) de forma consistente. Esto muestra, entonces, que las
+suposiciones y modificaciones hechas por este descriptor se concretan en la
+práctica. 
+
+De todas formas, en el caso particular de algunos dígitos, 13C muestra un
+comportamiento ligeramente inferior (en particular, 8CC parece tener un mejor
+comportamiento en el caso del 1 y el 2), lo que pudiera explicarse por los casos
+que 13C elimina. Por otro lado, 13C supera notablemente a los otros descriptores
+en el caso de dígitos como el 5 y el 6, lo que concuerda con la búsqueda que se
+realiza en las direcciones auxiliares para distinguir aquellos pixeles que
+realmente se encuentran encerrados.
+
+Los descriptores 4CC y 8CC tuvieron comportamientos similares en lo global,
+presentando \emph{tradeoffs} en lo que concierne a dígitos individuales. En
+particular, 4CC pareciera presentar dificultades para distinguir el 2 del 5, lo
+que pudiera explicarse considerando que son dígitos similares salvo el
+intercambio de la mitad superior con la inferior. Por otro lado, 8CC presenta un
+comportamiento inferior con dígitos como el 6, confundiéndolo con el 0. Esto
+puede suceder en particular cuando la curvatura del trazo superior es
+pronunciada.
+
+Los tres descriptores presentan dificultad en el caso del 8. Esto es
+comprensible al recordar que estos descriptores tratan de identificar la
+concavidad de forma local: así, por ejemplo, no son capaces de identificar que
+un 8 posee dos zonas internas, mientras que un 0 puede poseer sólo una: la única
+forma de distinguirlos consiste en el cambio en anchura del 8. Así, cobra
+relevancia el uso de las direcciones auxiliares definidas por 13C.
+
+Finalmente, es interesante notar que estas diferencias prácticamente desaparecen
+cuando se realiza la división espacial de las imágenes, haciendo que los
+descriptores presenten un comportamiento mucho más parecido y estable. Esto es
+consistente con lo expuesto con anterioridad, ya que los fenómenos descritos no
+suceden cuando la imagen está seccionada. Por ejemplo, al aplicar una grilla
+sobre un 8 se obtienen subimágenes muy diferentes de las obtenidas al hacerlo
+sobre un 0. Es interesante notar que el comportamiento global de 13C es el que
+menos cambia al aplicar división espacial. De esta forma, puede decirse que el
+aplicar división espacial a los métodos anteriores pudiera estar corrigiendo las
+mismas deficiencias que 13C.
+
+\section{Conclusiones}
+
+A partir del trabajo realizado y los resultados obtenidos, puede apreciarse que
+si bien las técnicas y razonamientos aplicadas para desarrollar el descriptor
+13C parecen ser efectivas, sus mejoras parecen ser equivalentes a las logradas
+mediante la división espacial de las imágenes. En este caso, entonces, la
+verdadera mejora introducida por el descriptor 13C es resultar en descriptores
+más cortos con un tasa de reconocimiento similar al caso en que se utilice
+división espacial.
+
+Queda abierta la posibilidad de estudiar el comportamiento del clasificador KNN
+en el caso de utilizar división espacial.
+
+\selectlanguage{spanish}
+\selectbiblanguage{spanish}
+
+\bibliography{./informe}
+
+\include{appendix}
+
+\end{document} 
