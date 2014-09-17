@@ -142,7 +142,7 @@ def mix_of_gaussians(image, theta):
 
     for idx_i in xrange(_x):
         for idx_j in xrange(y):
-            x = image[idx_j, idx_i].astype(np.float_)
+            x = image[idx_j, idx_i].astype(np.float_)[::-1]
 
             # Estos deberian ser, para cada i, los numeros que van en el
             # exponente :V
