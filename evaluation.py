@@ -131,16 +131,16 @@ def mix_of_gaussians(image, theta):
     # Los factores que van con los sumandos son los mismos siempre asi que
     # mejor precalcular :)
 
-    skin_factors = [ skin_w[i] / (((2.0 * np.pi)** (2.0/3.0)) *
-        np.sqrt(np.absolute(np.prod(skin_sigma[i]))))  for i in xrange(N) ]
+    val = 1.0 / (2.0 * np.pi)** (2.0/3.0)
 
-    nonskin_factors = [ nonskin_w[i] / (((2.0 * np.pi)** (2.0/3.0)) *
-        np.sqrt(np.absolute(np.prod(nonskin_sigma[i]))))  for i in xrange(N) ]
+    skin_factors = [ val * skin_w[i] / np.sqrt(np.absolute(np.prod(skin_sigma[i])))  for i in xrange(N) ]
+
+    nonskin_factors = [ val * nonskin_w[i] / np.sqrt(np.absolute(np.prod(nonskin_sigma[i])))  for i in xrange(N) ]
 
     #for each px
-    (y, x, fef) = image.shape
+    (y, _x, fef) = image.shape
 
-    for idx_i in xrange(x):
+    for idx_i in xrange(_x):
         for idx_j in xrange(y):
             x = image[idx_j, idx_i].astype(np.float_)
 
@@ -166,6 +166,7 @@ def mix_of_gaussians(image, theta):
 if __name__ == '__main__':
     img1 = cv2.imread(sys.argv[1])
     img2 = mix_of_gaussians(img1, float(sys.argv[2]))
+    cv2.imshow("original", img1)
     cv2.imshow("result", img2)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
