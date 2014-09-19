@@ -14,7 +14,7 @@ import math
 
 N = 16 # derp
 
-skin_w = [ 
+skin_w = [
         0.0294,
         0.0331,
         0.0654,
@@ -146,14 +146,14 @@ def mix_of_gaussians(image, theta):
 
             # Estos deberian ser, para cada i, los numeros que van en el
             # exponente :V
-            skin_exponents = [ np.sum((x - skin_mu[i])**2) / skin_sigma[i] for i in xrange(N) ] 
+            skin_exponents = [ np.sum((x - skin_mu[i])**2) / skin_sigma[i] for i in xrange(N) ]
 
-            
+
             skin_P = np.sum([ skin_factors[i] * np.exp( - skin_exponents[i]) for i
                 in xrange(N) ])
 
-            nonskin_exponents = [ np.sum((x - nonskin_mu[i])**2) / nonskin_sigma[i] for i in xrange(N) ] 
-            
+            nonskin_exponents = [ np.sum((x - nonskin_mu[i])**2) / nonskin_sigma[i] for i in xrange(N) ]
+
             nonskin_P = np.sum([ nonskin_factors[i] *
                 np.exp(- nonskin_exponents[i]) for i in xrange(N) ])
 
@@ -161,8 +161,44 @@ def mix_of_gaussians(image, theta):
 
     return dest_image
 
+def toBin(image):
+    img_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    (tresh, im_bw) = cv2.threshold(img_gray, 128, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
+    return im_bw
 
-    
+
+def genROCPoints(nonbinfile, binfile):
+    imgNB_Orig = cv2.imread(nonbinfile)
+    imgB = toBin(cv2.imread(binfile))
+    #Ambas imagenes DEBERIAN tener el mismo tamano
+    (y, _x, fef) = imgB.shape
+    puntos = []
+    for theta in range(0, 1, 0.1):
+        imgNB = toBin(mix_of_gaussians(imgNB_Orig), theta)
+        classSkin = 0  # let's call this class A'
+        classNoSkin = 0  # class B
+        FP = 0
+        TP = 0
+        for idx_i in range(_x):
+            for idx_j in range(y):
+                pixNB = imgNB[idx_j, idx_i]
+                pixB = imgB[idx_j, idx_i]
+                #Clase real extrayendo de imagenes procesadas manualmente
+                if(pixB == 255):
+                    classSkin += 1
+                    if (pixNB == 255):
+                        TP += 1
+                else:
+                    classNoSkin += 1
+                    if (pixNB == 255):
+                        FP += 1
+        #False Positive Rate (FPR)= FP/|B| (X axis)
+        fpr = FP / classSkin
+        #True Positive Rate (TPR)=TP/|A| (Y axis)
+        tpr = TP / classNoSkin
+        puntos.append((fpr, tpr))
+    return puntos
+
 if __name__ == '__main__':
     img1 = cv2.imread(sys.argv[1])
     img2 = mix_of_gaussians(img1, float(sys.argv[2]))
@@ -170,6 +206,3 @@ if __name__ == '__main__':
     cv2.imshow("result", img2)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
-
-
-
