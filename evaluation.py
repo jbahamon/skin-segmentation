@@ -161,6 +161,74 @@ def mix_of_gaussians(image, theta):
 
     return dest_image
 
+def roc_curve(num_images, thetas):
+
+    # Los factores que van con los sumandos son los mismos siempre asi que
+    # mejor precalcular :)
+
+    val = 1.0 / (2.0 * np.pi)** (2.0/3.0)
+
+    skin_factors = [ val * skin_w[i] / np.sqrt(np.absolute(np.prod(skin_sigma[i])))  for i in xrange(N) ]
+
+    nonskin_factors = [ val * nonskin_w[i] / np.sqrt(np.absolute(np.prod(nonskin_sigma[i])))  for i in xrange(N) ]
+
+    bin_folder = "./images/bin/"
+    nonbin_folder = "./images/nonbin/"
+
+    total_positives = 0.0
+    total_negatives = 0.0
+    TP = [0] * len(thetas)
+    FP = [0] * len(thetas)
+
+    for image_idx in xrange(1, num_images + 1):
+        print "Procesando imagen " + str(image_idx)
+        if image_idx < 10:
+            filename = "0" + str(image_idx) + ".png"
+        else:
+            filename = str(image_idx) + ".png"
+        
+        bin_img = cv2.imread(bin_folder + filename, cv2.CV_LOAD_IMAGE_GRAYSCALE)
+        bin_img = cv2.threshold(bin_img, 128, 255, cv2.THRESH_BINARY)[1]
+        nonbin_img = cv2.imread(nonbin_folder + filename)
+        (y, x, fef) = nonbin_img.shape
+
+        for idx_i in xrange(x):
+            for idx_j in xrange(y):
+                px = nonbin_img[idx_j, idx_i].astype(np.float_)[::-1]
+
+            # Estos deberian ser, para cada i, los numeros que van en el
+            # exponente :V
+                skin_exponents = [ np.sum((px - skin_mu[i])**2) / skin_sigma[i]
+                        for i in xrange(N) ]
+                skin_P = np.sum([ skin_factors[i] * np.exp( - skin_exponents[i])
+                    for i in xrange(N) ])
+
+                nonskin_exponents = [ np.sum((px - nonskin_mu[i])**2) /
+                        nonskin_sigma[i] for i in xrange(N) ]
+                nonskin_P = np.sum([ nonskin_factors[i] * 
+                    np.exp(- nonskin_exponents[i]) for i in xrange(N) ])
+
+                true_value = bin_img.item(idx_j, idx_i)
+                
+                if bin_img.item(idx_j, idx_i) > 0:
+                    total_positives += 1
+
+                for i in xrange(len(thetas)):
+
+                    # We have a positive
+                    if skin_P/nonskin_P > thetas[i]:
+                        if true_value > 0:
+                            TP[i] +=1
+                        else:
+                            FP[i] += 1
+
+        total_negatives += (x * y - total_positives)
+
+    TPR = [ positives / total_positives for positives in TP ]
+    FPR = [ positives / total_negatives for positives in FP ]
+
+    return zip(FPR, TPR)
+
 def toBin(image):
     img_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     (tresh, im_bw) = cv2.threshold(img_gray, 128, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
@@ -200,9 +268,16 @@ def genROCPoints(nonbinfile, binfile):
     return puntos
 
 if __name__ == '__main__':
-    img1 = cv2.imread(sys.argv[1])
-    img2 = mix_of_gaussians(img1, float(sys.argv[2]))
-    cv2.imshow("original", img1)
-    cv2.imshow("result", img2)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+
+    # img1 = cv2.imread(sys.argv[1])
+    # img2 = mix_of_gaussians(img1, float(sys.argv[2]))
+    # cv2.imshow("original", img1)
+    # cv2.imshow("result", img2)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
+
+    num_images = 1
+    thetas = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
+
+    print roc_curve(num_images, thetas)
+
