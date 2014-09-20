@@ -181,6 +181,7 @@ def roc_curve(num_images, thetas):
     FP = [0] * len(thetas)
 
     for image_idx in xrange(1, num_images + 1):
+        current_positives = 0
         print "Procesando imagen " + str(image_idx)
         if image_idx < 10:
             filename = "0" + str(image_idx) + ".png"
@@ -211,7 +212,7 @@ def roc_curve(num_images, thetas):
                 true_value = bin_img.item(idx_j, idx_i)
                 
                 if bin_img.item(idx_j, idx_i) > 0:
-                    total_positives += 1
+                    current_positives += 1
 
                 for i in xrange(len(thetas)):
 
@@ -222,7 +223,8 @@ def roc_curve(num_images, thetas):
                         else:
                             FP[i] += 1
 
-        total_negatives += (x * y - total_positives)
+        total_negatives += (x * y - current_positives)
+        total_positives += current_positives
 
     TPR = [ positives / total_positives for positives in TP ]
     FPR = [ positives / total_negatives for positives in FP ]
@@ -276,8 +278,11 @@ if __name__ == '__main__':
     # cv2.waitKey(0)
     # cv2.destroyAllWindows()
 
-    num_images = 1
+    num_images = 30
     thetas = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
 
-    print roc_curve(num_images, thetas)
+    points = roc_curve(num_images, thetas)
+
+    for pair in points:
+        print pair
 
