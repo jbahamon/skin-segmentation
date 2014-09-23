@@ -279,7 +279,7 @@ if __name__ == '__main__':
     # cv2.destroyAllWindows()
 
     num_images = 30
-    thetas = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
+    thetas = np.arange(0.1,1,0.05)#inicio, fin, paso; paso=0.1 =>[0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
 
     points = roc_curve(num_images, thetas)
 
