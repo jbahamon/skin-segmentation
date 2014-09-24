@@ -195,7 +195,7 @@ def roc_curve(num_images, thetas):
 
         for idx_i in xrange(x):
             for idx_j in xrange(y):
-                px = nonbin_img[idx_j, idx_i].astype(np.float_)[::-1]
+                px = nonbin_img[idx_j, idx_i].astype(np.float_)
 
             # Estos deberian ser, para cada i, los numeros que van en el
             # exponente :V
@@ -279,7 +279,7 @@ if __name__ == '__main__':
     # cv2.destroyAllWindows()
 
     num_images = 30
-    thetas = np.arange(0.9,1,0.01)#inicio, fin, paso; paso=0.1 =>[0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
+    thetas = np.concatenate((np.arange(0.1, 0.9, 0.1), np.arange(0.9, 1, 0.01)))
 
     points = roc_curve(num_images, thetas)
 
