@@ -16,6 +16,11 @@
 \usepackage{tikz}%Generar plots
 \usepackage{pgfplots}%Generar plots
 \pgfplotsset{compat=1.5}
+\usepackage{pgfplotstable,filecontents}
+\pgfplotsset{compat=1.9}% supress warning
+\usepackage{booktabs}
+
+\pgfkeys{/pgf/number format/.cd,fixed,precision=5}
 
 \usepackage[titletoc, title]{appendix}
 \addto{\captionsspanish}{\renewcommand*{\appendixname}{Anexo}}
@@ -151,7 +156,7 @@ Se definen, en este contexto:
 \begin{itemize}
     \item el \textbf{número de positivos ($P$)} como el número de pixeles en el dataset
         que corresponden a piel (según la \emph{ground truth});
-    \item el número de negativos($N$) como el número de pixeles en el dataset
+    \item el \textbf{número de negativos($N$)} como el número de pixeles en el dataset
         que no corresponden a piel;
     \item el \textbf{número de falsos positivos ($FP$)} como el número de
         pixeles en el dataset que el modelo identifica como piel, pero que no
@@ -196,8 +201,7 @@ de gaussianas en el dataset generado y la posterior comparación con la
 %\addplot table [only marks,scatter,x={FP}, y={TP}]{results(0.1,1,0.5).csv};
 \end{axis}
 \end{tikzpicture}
-    \caption{Curva ROC obtenida al variar el parámetro umbral $\Theta$ entre los
-    valores *** y ***.}
+    \caption{Curva ROC obtenida al variar el parámetro umbral $\Theta \in \{ 0.1,0.5,...,0.9,0.91,...0,99\}$.}
 \end{figure}
 
 Para ejemplificar de mejor forma el comportamiento del algoritmo, se presentan a
@@ -206,14 +210,10 @@ efectividad.
 
 \begin{figure}[h]
     \centering
-   \hfill\subcaptionbox{Imagen del \emph{dataset}
-    utilizado.}{\includegraphics[scale=0.5]{../images/nonbin/05.png}}
-   \hfill\subcaptionbox{Imagen del \emph{dataset}
-    utilizado.}{\includegraphics[scale=0.5]{../images/bin/05.png}}
-   \hfill\subcaptionbox{Imagen del \emph{dataset}
-    utilizado.}{\includegraphics[scale=0.5]{../done0.5/05.png}}
-   \hfill\subcaptionbox{Imagen del \emph{dataset}
-    utilizado.}{\includegraphics[scale=0.5]{../done0.9/05.png}}
+   \hfill\subcaptionbox{Imagen original}{\includegraphics[scale=0.4]{../images/nonbin/05.png}}
+   \hfill\subcaptionbox{\emph{GroundTruth}.}{\includegraphics[scale=0.4]{../images/bin/05.png}}
+   \hfill\subcaptionbox{Output de \emph{Mixture of Gaussians} con $\Theta = 0.5$.}{\includegraphics[scale=0.4]{../done0.5/05.png}}
+   \hfill\subcaptionbox{Output de \emph{MoG} con $\Theta = 0.9$.}{\includegraphics[scale=0.4]{../done0.9/05.png}}
     \caption{A la izquierda, imágenes del dataset. En el centro, la \emph{ground
     truth} correspondiente. A la derecha, el resultado obtenido por el modelo de
     mezcla de gaussianas.}
@@ -236,11 +236,27 @@ herramientas depende del contexto de uso.
 
 \section{Conclusiones}
 
+
+
 \selectlanguage{spanish}
 \selectbiblanguage{spanish}
 
 \bibliography{./informe}
 
 %\include{appendix}
+
+\begingroup
+\centering
+\pgfplotstabletypeset[col sep=tab,
+%     columns={T,FP,TP},
+     display columns/0/.style={column name=$\Theta$},
+     display columns/1/.style={column name=\emph{FalsePositive}},
+     display columns/2/.style={column name=\emph{TruePositive}},
+     every head row/.style={before row=\toprule,after row=\midrule},
+     every last row/.style={after row=\bottomrule},
+    ]{results.csv}
+\captionof{figure}{TruePositive and FalsePositive rates obtained.}\label{fig:f}
+\endgroup
+
 
 \end{document} 
