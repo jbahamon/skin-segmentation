@@ -12,6 +12,7 @@
 \usepackage{amssymb}
 \usepackage{graphicx}
 \usepackage{verbatim} 
+\usepackage{caption, subcaption}
 
 \usepackage[titletoc, title]{appendix}
 \addto{\captionsspanish}{\renewcommand*{\appendixname}{Anexo}}
@@ -30,7 +31,7 @@
     El reconocimiento y clasificación de caracteres impresos es un método
     conocido para la digitalización de texto, de modo de poder realizar el
     almacenamiento, búsqueda y otros análisis de mejor forma.  El estudio y
-    comparación de diferentes descriptores es necesario en un área en que
+    icomparación de diferentes descriptores es necesario en un área en que
     diversas variantes son propuestas en base a intuiciones. En particular, una
     clase importante de descriptores está compuesta por aquellos basados en
     nociones de concavidad. En este trabajo se estudiaron tres descriptores
@@ -112,7 +113,7 @@ complejidad del modelo, (ya que un mayor valor de $N$ resulta en más gaussianas
 y por tanto un mayor número de grados de libertad) siendo un parámetro a
 elección. 
 
-Los autores de \cite{fef}*** entrenaron modelos para estimar ambas
+Los autores de \cite{skin} entrenaron modelos para estimar ambas
 distribuciones de probabilidad descritas, con lo que estos parámetros tienen
 valores dados. Así, el trabajo se enfocó en variar el umbral de detección,
 $\Theta$.
@@ -130,9 +131,11 @@ estadístico.
 
 \begin{figure}[h]
     \centering
-   % \includegraphics{digit}
-    \caption{A la izquierda, una de las imágenes del \emph{dataset} generado. A
-    la derecha, el perfil de piel utilizado como \emph{ground truth}.}
+    \hfill\subcaptionbox{Imagen del \emph{dataset}
+    utilizado.}{\includegraphics[scale=0.5]{06}}
+    \hfill\subcaptionbox{Perfil de piel utilizado como \emph{ground
+    truth}}{\includegraphics[scale=0.5]{06b}}
+    \caption{Ejemplo del \emph{dataset} usado.}
 \end{figure}
 
 \section{Resultados obtenidos}
