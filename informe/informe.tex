@@ -111,25 +111,41 @@ gaussianas:
     \frac{1}{(2\pi)^{\frac{3}{2}} | \Sigma_i |^\frac{1}{2}} e^{-\frac{1}{2}
     (\mathbf{x} - \mathbf{\mu}_i)^{\text{T}} \Sigma_i ^{-1} (\mathbf{x} -
     \mathbf{\mu}_i)},
-\end{equation}
+\end{equation} 
+
 donde los valores $\mu_i$ y $\Sigma_i$ son las medias de cada gaussiana y las
 correspondientes matrices (diagonales) de covarianza. Los valores $w_i$
 determinan el peso que cada gaussiana ejerce en la mezcla. $N$ define la
 complejidad del modelo, (ya que un mayor valor de $N$ resulta en más gaussianas
 y por tanto un mayor número de grados de libertad) siendo un parámetro a
-elección.
-\end{figure}
+elección. 
 
-Los autores de \cite{fef} entrenaron modelos para estimar ambas distribuciones
-de probabilidad descritas.
+Los autores de \cite{fef} entrenaron modelos para estimar ambas
+distribuciones de probabilidad descritas, con lo que estos parámetros tienen
+valores dados. Así, el trabajo se enfocó en variar el umbral de detección,
+$\Theta$.
 
 \subsection{Dataset utilizado}
+
+Se construyó un pequeño \emph{dataset} compuesto por imágenes de dos tipos. Por
+un lado, se recopilaron 15*** imágenes intentando incorporar variaciones en
+iluminación, tonos de piel y el nivel de detalle del fondo. Otras 15 imágenes
+fueron tomadas de un dataset***. Para cada imagen del dataset generado, se
+obtuvo una imagen que identifica las zonas que son piel, generándose así la
+\emph{ground truth} contra la que se comparó el rendimiento del modelo
+estadístico.
+
+
 \begin{figure}[h]
     \centering
    % \includegraphics{digit}
-\caption{Ejemplo de las imágenes con las que se trabajó.}
+    \caption{A la izquierda, una de las imágenes del \emph{dataset} generado. A
+    la derecha, el perfil de piel utilizado como \emph{ground truth}.}
+\end{figure}
 
 \section{Evaluación y Análisis de Resultados}
+
+
 
 \subsection{Resultados de los Experimentos}
 
