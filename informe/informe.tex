@@ -69,14 +69,6 @@ Utilizamos un set de datos de treinta imágenes, de las cuales la mitad fueron e
 En este trabajo se realizó la evaluación de un algoritmo para el reconocimiento
 de piel basado en modelos estadísticos de color. 
 
-En una primera etapa, se generó un \emph{dataset}
-pequeño, de 30 imágenes, desde dos fuentes. 
-Este trabajo se enfocó en la clasificación de dígitos impresos
-
-(es decir, no
-escritos a mano) utilizando imágenes binarizadas con un tamaño estándar, con
-dígitos negros sobre un fondo blanco.
-
 \subsection{Modelos de color}
 
 Una forma de modelar una característica a detectar es mediante un modelo
@@ -208,10 +200,12 @@ mejor comportamiento en el caso de ***.
 
 Por otro lado, se aprecia que existen diferentes tipos de error. En ciertos
 casos, existen muchos pixeles dispersos detectados como piel esparcidos por la
-imagen. En este caso, aplicar algún mecanismo de detección de
-\emph{blobs} podría ayudar a descartar este tipo de errores. Otros casos son más
-difíciles de tratar, como la identificación de ciertas telas y texturas como
-piel.
+imagen. En este caso, aplicar algún mecanismo de detección de \emph{blobs}
+podría ayudar a descartar este tipo de errores. Otros casos corresponden a la
+identificación de ciertas telas y texturas como piel, en los que complementar
+con técnicas como \emph{local binary patterns} podrían ayudar a un mejor
+desempeño. De todos modos, la conveniencia de complementar el modelo con estas
+herramientas depende del contexto de uso.
 
 \section{Conclusiones}
 
