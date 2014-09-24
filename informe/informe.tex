@@ -59,19 +59,28 @@
 % analizamos la performance de MoG en el reconocimiento de piel en un set de 30 imagenes sacadas de la web
 
 La masificación en el uso de la World Wide Web ha contribuido en la aparición de
-grandes conjuntos de datos. La masividad de datos disponible soporta la aparición de
-algoritmos simples y computacionalmente eficientes. Las grandes colecciones de imágenes on-line permiten
-la construcción de modelos estadísticos, caracterizando la apariencia de una imagen a través de
-la información de sus pixeles.
+grandes conjuntos de datos. La masividad de datos disponible soporta la
+aparición de algoritmos simples y computacionalmente eficientes. Las grandes
+colecciones de imágenes on-line permiten la construcción de modelos
+estadísticos, caracterizando la apariencia de una imagen a través de la
+información de sus pixeles.
 
-La segmentación de piel es una aplicación útil del reconocimiento de patrones. Es utilizada en el campo de la detección de personas y rostros, generalmente
-para discriminar ambigüedades en la detección y reducir malas clasificaciones. En el ámbito de la seguirdad, ha sido usada en programas de control parental, como herramienta de detección de contenido adulto en la web.
+La segmentación de piel es una aplicación útil del reconocimiento de patrones.
+Es utilizada en el campo de la detección de personas y rostros, generalmente
+para discriminar ambigüedades en la detección y reducir malas clasificaciones.
+En el ámbito de la seguridad, ha sido usada en programas de control parental,
+como herramienta de detección de contenido adulto en la web.
 
-Estudiamos el segmentador de piel probabilístico propuesto por \emph{Jones y Rehg} en \emph{Statistical color models with application to skin detection}. En particular analizamos el desempeño del método \emph{Mixture of Gaussians}, al variar la razón de costo asociado a los falsos positivos y falsos negativos ($\Theta$).
+Estudiamos el segmentador de piel probabilístico propuesto por \emph{Jones y
+Rehg} en \emph{Statistical color models with application to skin
+detection}\cite{skin}. En particular analizamos el desempeño del método
+\emph{Mixture of Gaussians}, al variar la razón de costo asociado a los falsos
+positivos y falsos negativos ($\Theta$).
 
-Utilizamos un set de datos de treinta imágenes, de las cuales la mitad fueron encontradas en internet seleccionadas, considerando la tez de los sujetos. La segunda mitad consiste en imágenes extraidas del dataset Pratheepan.
-
-
+Utilizamos un set de datos de treinta imágenes, de las cuales la mitad fueron
+encontradas en internet seleccionadas, considerando la tez de los sujetos. La
+segunda mitad consiste en imágenes extraidas del dataset Pratheepan
+\cite{dataset}.
 
 \section{Descripción del Trabajo}
 
@@ -129,12 +138,13 @@ $\Theta$.
 \subsection{Dataset utilizado}
 
 Se construyó un pequeño \emph{dataset} compuesto por imágenes de dos tipos. Por
-un lado, se recopilaron 15*** imágenes intentando incorporar variaciones en
-iluminación, tonos de piel y el nivel de detalle del fondo. Otras 15 imágenes
-fueron tomadas de un dataset***. Para cada imagen del dataset generado, se
-obtuvo una imagen que identifica las zonas que son piel, generándose así la
-\emph{ground truth} contra la que se comparó el rendimiento del modelo
-estadístico.
+un lado, se recopilaron 14 imágenes buscando incorporar variaciones en
+iluminación, tonos de piel y el nivel de detalle del fondo. Otras 16 imágenes
+fueron tomadas del dataset utilizado en \cite{dataset} (junto con las
+correspondientes \emph{ground truths}). Para cada imagen del
+dataset generado, se obtuvo una imagen que identifica las zonas que son piel,
+generándose así la \emph{ground truth} contra la que se comparó el rendimiento
+del modelo estadístico.
 
 \begin{figure}[H]
     \centering
@@ -189,7 +199,7 @@ de gaussianas en el dataset generado y la posterior comparación con la
 
 \begin{tikzpicture}
 \begin{axis}[
-	title=ROC,
+        title={Curva ROC},
 	xlabel={False Positive Rate},
 	ylabel={True Positive Rate},
 	grid=major,
@@ -208,15 +218,37 @@ Para ejemplificar de mejor forma el comportamiento del algoritmo, se presentan a
 continuación algunos ejemplos en los que el modelo muestra diferentes grados de
 efectividad.
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
    \hfill\subcaptionbox{Imagen original}{\includegraphics[scale=0.4]{../images/nonbin/05.png}}
    \hfill\subcaptionbox{\emph{GroundTruth}.}{\includegraphics[scale=0.4]{../images/bin/05.png}}
    \hfill\subcaptionbox{Output de \emph{Mixture of Gaussians} con $\Theta = 0.5$.}{\includegraphics[scale=0.4]{../done0.5/05.png}}
    \hfill\subcaptionbox{Output de \emph{MoG} con $\Theta = 0.9$.}{\includegraphics[scale=0.4]{../done0.9/05.png}}
-    \caption{A la izquierda, imágenes del dataset. En el centro, la \emph{ground
-    truth} correspondiente. A la derecha, el resultado obtenido por el modelo de
-    mezcla de gaussianas.}
+   \caption{Imagen para la cual el modelo presenta un buen comportamiento}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+   \hfill\subcaptionbox{Imagen
+   original}{\includegraphics[scale=0.3]{../images/nonbin/17.png}}
+   \hfill\subcaptionbox{\emph{GroundTruth}.}{\includegraphics[scale=0.3]{../images/bin/17.png}}
+   \hfill\subcaptionbox{Output de \emph{Mixture of Gaussians} con $\Theta =
+   0.5$.}{\includegraphics[scale=0.3]{../done0.5/17.png}}
+   \hfill\subcaptionbox{Output de \emph{MoG} con $\Theta =
+   0.9$.}{\includegraphics[scale=0.3]{../done0.9/17.png}}
+   \caption{Imagen para la cual el modelo presenta un comportamiento regular}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+   \hfill\subcaptionbox{Imagen
+   original}{\includegraphics[scale=0.2]{../images/nonbin/09.png}}
+   \hfill\subcaptionbox{\emph{GroundTruth}.}{\includegraphics[scale=0.2]{../images/bin/09.png}}
+   \hfill\subcaptionbox{Output de \emph{Mixture of Gaussians} con $\Theta =
+   0.5$.}{\includegraphics[scale=0.2]{../done0.5/09.png}}
+   \hfill\subcaptionbox{Output de \emph{MoG} con $\Theta =
+   0.9$.}{\includegraphics[scale=0.2]{../done0.9/05.png}}
+   \caption{Imagen para la cual el modelo presenta un mal comportamiento}
 \end{figure}
 
 \subsection{Discusión}
@@ -264,21 +296,6 @@ es posible realizar \emph{MoG} sobre la zona en cuestión y discriminar a partir
 
 \bibliography{./informe}
 
-%\include{appendix}
-
-\section{Anexos}
-\begingroup
-\centering
-\pgfplotstabletypeset[col sep=tab,
-%     columns={T,FP,TP},
-     display columns/0/.style={column name=$\Theta$},
-     display columns/1/.style={column name=\emph{FalsePositiveRate}},
-     display columns/2/.style={column name=\emph{TruePositiveRate}},
-     every head row/.style={before row=\toprule,after row=\midrule},
-     every last row/.style={after row=\bottomrule},
-    ]{results.csv}
-\captionof{figure}{TruePositive and FalsePositive rates obtained.}\label{fig:f}
-\endgroup
-
+\include{appendix}
 
 \end{document} 
