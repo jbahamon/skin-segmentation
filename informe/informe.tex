@@ -11,16 +11,16 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{graphicx}
-
+\usepackage{verbatim} 
 
 \usepackage[titletoc, title]{appendix}
 \addto{\captionsspanish}{\renewcommand*{\appendixname}{Anexo}}
 
 \bibliographystyle{bababbrv}
 
-\title{Clasificación de Dígitos Impresos: OCR}
-\author{Jorge Bahamonde\\
-\small{\url{jbahamon@ug.uchile.cl}}}
+\title{Segmentación de Piel}
+\author{Jorge Bahamonde, Sebastián González\\
+\small{\url{jbahamon@ug.uchile.cl}, \url{segonzal@dcc.uchile.cl}}}
 \date{}
 
 \begin{document}
@@ -43,31 +43,26 @@
 
 \section{Introducción}
 
-El reconocimiento de dígitos impresos es una aplicación del reconocimiento de
-patrones, siendo aplicable para el procesamiento de formularios y automatización
-de digitalización de documentos. En particular, la clasificación de dígitos
-impresos puede ayudar, por ejemplo, en la digitalización de documentos
-relacionados con contabilidad.
+%> grandes data sets (WWW) hacen posible soportar simples, eficientes algoritmos de aprendizaje.
+%> dado una gran cantidad de datos, incluso simples reglas de aprendizaje arrojan buenos resultados
+%> importante en el aprendizaje visual es la construccion de modelos de apariencia de la imagen desde datos de pixeles
+% en paper "Statistical color models with application to skin detection" entrenaron un modelo de mix_of_gaussians con MUUUUUUCHOS dataz para clasificacion de piel
+% analizamos la performance de MoG en el reconocimiento de piel en un set de 30 imagenes sacadas de la web
 
-Un paso importante en el proceso de clasificación es el de extracción de las
-características de las imágenes a clasificar, en la forma de descriptores.
-Existen múltiples técnicas para este propósito, siendo necesario el análisis y
-comparación de su desempeño. En particular, existe un conjunto de técnicas
-orientadas a describir imágenes en base a un modelamiento de sus propiedades de
-concavidad. Estos descriptores usualmente son utilizados como un complemento
-para otro tipo de descriptores \cite{conc}.
+La masificación en el uso de la World Wide Web ha contribuido en la aparición de
+grandes conjuntos de datos. La masividad de datos disponible soprta la aparición de
+algoritmos simples y computacionalmente eficientes.Las grandes colecciones de imágenes on-line permiten
+la construcción de modelos estadísticos, caracterizando la apariencia de una imagen utilizando
+la información de sus pixeles.
 
-Adicionalmente, una forma común de mejorar la efectividad de un descriptor es
-realizar la división espacial de la imagen a describir. Así, para cada zona
-creada se genera un descriptor, siendo la concatenación de todos éstos el
-descriptor global. Sin embargo, una consecuencia directa de esto es un
-incremento en el tamaño del descriptor.
+La segmentación de piel es una aplicación útil del reconocimiento de patrones. Es utilizada en el campo de la detección de personas y rostros, generalmente
+para discriminar ambigüedades en la detección y reducir malas clasificaciones. En el ámbito de la seguirdad, ha sido usada en programas de control parental, como herramienta de detección de contenido adulto en la web.
 
-En este trabajo se estudiaron y compararon tres descriptores basados en
-conceptos de concavidad, en el contexto del reconocimiento de dígitos impresos.
-Además de explorar los parámetros utilizados al momento de la clasificación, se
-analizó el comportamiento observado al introducir mecanismos de división
-espacial. 
+Estudiamos el segmentador de piel probabilístico propuesto por \emph{Jones y Rehg} en \emph{Statistical color models with application to skin detection}. En particular analizamos el desempeño del método \emph{Mixture of Gaussians}, al variar la razón de costo asociado a los falsos positivos y falsos negativos.
+
+Utilizamos un set de datos de treinta imágenes, de las cuales la mitad fueron encontradas en internet seleccionadas, considerando la tez de los sujetos. La segunda mitad consiste en imágenes extraidas del dataset Pratheepan.
+
+
 
 \section{Descripción del Trabajo}
 
@@ -117,18 +112,22 @@ gaussianas:
     (\mathbf{x} - \mathbf{\mu}_i)^{\text{T}} \Sigma_i ^{-1} (\mathbf{x} -
     \mathbf{\mu}_i)},
 \end{equation}
-
 donde los valores $\mu_i$ y $\Sigma_i$ son las medias de cada gaussiana y las
 correspondientes matrices (diagonales) de covarianza. Los valores $w_i$
 determinan el peso que cada gaussiana ejerce en la mezcla. $N$ define la
 complejidad del modelo, (ya que un mayor valor de $N$ resulta en más gaussianas
 y por tanto un mayor número de grados de libertad) siendo un parámetro a
 elección.
+\end{figure}
 
 Los autores de \cite{fef} entrenaron modelos para estimar ambas distribuciones
 de probabilidad descritas.
 
 \subsection{Dataset utilizado}
+\begin{figure}[h]
+    \centering
+   % \includegraphics{digit}
+\caption{Ejemplo de las imágenes con las que se trabajó.}
 
 \section{Evaluación y Análisis de Resultados}
 
