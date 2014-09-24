@@ -131,12 +131,12 @@ obtuvo una imagen que identifica las zonas que son piel, generándose así la
 \emph{ground truth} contra la que se comparó el rendimiento del modelo
 estadístico.
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
-    \hfill\subcaptionbox{Imagen del \emph{dataset}
+    \subcaptionbox{Imagen del \emph{dataset}
     utilizado.}{\includegraphics[scale=0.9]{../images/nonbin/12.png}}
-    \hfill\subcaptionbox{Perfil de piel utilizado como \emph{ground
-    truth}}{\includegraphics[scale=0.9]{../images/bin/12.png}}
+    \subcaptionbox{Perfil de piel utilizado como \emph{ground
+    truth}.}{\includegraphics[scale=0.9]{../images/bin/12.png}}
     \caption{Ejemplo del \emph{dataset} usado.}
 \end{figure}
 
@@ -151,7 +151,7 @@ Se definen, en este contexto:
 \begin{itemize}
     \item el \textbf{número de positivos ($P$)} como el número de pixeles en el dataset
         que corresponden a piel (según la \emph{ground truth});
-    \item el número de negativos($N$) como el número de pixeles en el dataset
+    \item el \textbf{número de negativos ($N$)} como el número de pixeles en el dataset
         que no corresponden a piel;
     \item el \textbf{número de falsos positivos ($FP$)} como el número de
         pixeles en el dataset que el modelo identifica como piel, pero que no
@@ -162,7 +162,7 @@ Se definen, en este contexto:
     \item la \textbf{tasa de verdaderos positivos ($TPR$)} (también llamada
         probabilidad de detección correcta) como $\frac{TP}{P}$;
     \item la \textbf{tasa de falsos positivos ($FPR$)} (o probabilidad de
-        detección incorrecta) como $FP/N$.
+        detección incorrecta) como $\frac{FP}{N}$.
 \end{itemize}
 
 Así, el comportamiento de un modelo de detección como el estudiado puede ser
