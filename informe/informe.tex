@@ -13,6 +13,9 @@
 \usepackage{graphicx}
 \usepackage{verbatim} 
 \usepackage{caption, subcaption}
+\usepackage{tikz}%Generar plots
+\usepackage{pgfplots}%Generar plots
+\pgfplotsset{compat=1.5}
 
 \usepackage[titletoc, title]{appendix}
 \addto{\captionsspanish}{\renewcommand*{\appendixname}{Anexo}}
@@ -179,6 +182,21 @@ de gaussianas en el dataset generado y la posterior comparación con la
 \begin{figure}[h]
     \centering
    % \includegraphics{digit}
+
+\begin{tikzpicture}
+\begin{axis}[
+	title=ROC,
+	xlabel={False Positive Rate},
+	ylabel={True Positive Rate},
+	grid=major,
+	legend entries={$0.01$ , $0.1$,$0.5$},
+	legend style={at={(0,1)},anchor=north west},
+]
+\addplot table [only marks,scatter,x={FP}, y={TP}]{results(0.9,1,0.01).csv};
+\addplot table [only marks,scatter,x={FP}, y={TP}]{results(0.1,1,0.1).csv};
+\addplot table [only marks,scatter,x={FP}, y={TP}]{results(0.1,1,0.5).csv};
+\end{axis}
+\end{tikzpicture}
     \caption{Curva ROC obtenida al variar el parámetro umbral $\Theta$ entre los
     valores *** y ***.}
 \end{figure}
