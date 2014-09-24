@@ -120,7 +120,7 @@ complejidad del modelo, (ya que un mayor valor de $N$ resulta en más gaussianas
 y por tanto un mayor número de grados de libertad) siendo un parámetro a
 elección. 
 
-Los autores de \cite{fef} entrenaron modelos para estimar ambas
+Los autores de \cite{fef}*** entrenaron modelos para estimar ambas
 distribuciones de probabilidad descritas, con lo que estos parámetros tienen
 valores dados. Así, el trabajo se enfocó en variar el umbral de detección,
 $\Theta$.
@@ -143,7 +143,7 @@ estadístico.
     la derecha, el perfil de piel utilizado como \emph{ground truth}.}
 \end{figure}
 
-\section{Evaluación y Análisis de Resultados}
+\section{Resultados obtenidos}
 
 Para evaluar el desempeño del modelo estudiado, se le utilizó para detectar piel
 en las imágenes del dataset, contrastándolos con los perfiles de piel
@@ -174,12 +174,44 @@ definida por estas dos variables al variar un tercer parámetro se denomina curv
 ROC (del inglés \emph{receiver operating characteristic}). Esta curva muestra
 cuán apropiado puede ser un modelo o algoritmo para ciertas aplicaciones, ya que
 el costo de un falso positivo versus un verdadero positivo varía dependiendo del
-contexto. En este trabajo se realizó la variación del parámetro de umbral de detección,
-$\Theta$, obteniéndose una curva ROC.
+contexto.
 
-\subsection{Resultados de los Experimentos}
+Se construyó una curva ROC a partir de los resultados obtenidos al utilizar el modelo de mezcla
+de gaussianas en el dataset generado y la posterior comparación con la
+\emph{ground truth}:
+
+
+\begin{figure}[h]
+    \centering
+   % \includegraphics{digit}
+    \caption{Curva ROC obtenida al variar el parámetro umbral $\Theta$ entre los
+    valores *** y ***.}
+\end{figure}
+
+Para ejemplificar de mejor forma el comportamiento del algoritmo, se presentan a
+continuación algunos ejemplos en los que el modelo muestra diferentes grados de
+efectividad.
+
+\begin{figure}[h]
+    \centering
+   % \includegraphics{digit}
+    \caption{A la izquierda, imágenes del dataset. En el centro, la \emph{ground
+    truth} correspondiente. A la derecha, el resultado obtenido por el modelo de
+    mezcla de gaussianas.}
+\end{figure}
 
 \subsection{Discusión}
+
+Se observa que, en general, el modelo alcanza **. En particular, el modelo
+parece presentar un menor rendimiento cuando ***, logrando, por el contrario, un
+mejor comportamiento en el caso de ***. 
+
+Por otro lado, se aprecia que existen diferentes tipos de error. En ciertos
+casos, existen muchos pixeles dispersos detectados como piel esparcidos por la
+imagen. En este caso, aplicar algún mecanismo de detección de
+\emph{blobs} podría ayudar a descartar este tipo de errores. Otros casos son más
+difíciles de tratar, como la identificación de ciertas telas y texturas como
+piel.
 
 \section{Conclusiones}
 
