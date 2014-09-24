@@ -145,7 +145,37 @@ estadístico.
 
 \section{Evaluación y Análisis de Resultados}
 
+Para evaluar el desempeño del modelo estudiado, se le utilizó para detectar piel
+en las imágenes del dataset, contrastándolos con los perfiles de piel
+etiquetados correctamente. 
 
+Se definen, en este contexto: 
+
+\begin{itemize}
+    \item el \textbf{número de positivos ($P$)} como el número de pixeles en el dataset
+        que corresponden a piel (según la \emph{ground truth});
+    \item el número de negativos($N$) como el número de pixeles en el dataset
+        que no corresponden a piel;
+    \item el \textbf{número de falsos positivos ($FP$)} como el número de
+        pixeles en el dataset que el modelo identifica como piel, pero que no
+        están etiquetados como tal en la \emph{ground truth};
+    \item el \textbf{número de verdaderos positivos ($TP$)} como el número de
+        pixeles en el dataset que el algoritmo identifica correctamente como
+        piel;
+    \item la \textbf{tasa de verdaderos positivos ($TPR$)} (también llamada
+        probabilidad de detección correcta) como $\frac{TP}{P}$;
+    \item la \textbf{tasa de falsos positivos ($FPR$)} (o probabilidad de
+        detección incorrecta) como $FP/N$.
+\end{itemize}
+
+Así, el comportamiento de un modelo de detección como el estudiado puede ser
+apreciado al comparar el comportamiento de la $FPR$ versus la $TPR$. La curva
+definida por estas dos variables al variar un tercer parámetro se denomina curva
+ROC (del inglés \emph{receiver operating characteristic}). Esta curva muestra
+cuán apropiado puede ser un modelo o algoritmo para ciertas aplicaciones, ya que
+el costo de un falso positivo versus un verdadero positivo varía dependiendo del
+contexto. En este trabajo se realizó la variación del parámetro de umbral de detección,
+$\Theta$, obteniéndose una curva ROC.
 
 \subsection{Resultados de los Experimentos}
 
