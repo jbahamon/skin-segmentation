@@ -1,17 +1,18 @@
 \begin{appendices}
 
-\section{Tasas de falsos positivos y verdaderos positivos obtenidos}
+\section{Tasas de falsos positivos y verdaderos positivos obtenidas}
+
 \begingroup
 \centering
 \pgfplotstabletypeset[col sep=tab,
 %     columns={T,FP,TP},
      display columns/0/.style={column name=$\Theta$},
-     display columns/1/.style={column name=\emph{FalsePositive}},
-     display columns/2/.style={column name=\emph{TruePositive}},
+     display columns/1/.style={column name=\emph{FalsePositiveRate}},
+     display columns/2/.style={column name=\emph{TruePositiveRate}},
      every head row/.style={before row=\toprule,after row=\midrule},
      every last row/.style={after row=\bottomrule},
     ]{results.csv}
-\captionof{figure}{TruePositive and FalsePositive rates obtained.}\label{fig:f}
+\captionof{figure}{Tasas de falsos positivos y verdaderos positivos obtenidas.}\label{fig:f}
 \endgroup
 
 

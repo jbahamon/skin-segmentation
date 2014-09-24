@@ -17,8 +17,8 @@
 \usepackage{pgfplots}%Generar plots
 \pgfplotsset{compat=1.5}
 \usepackage{pgfplotstable,filecontents}
-\pgfplotsset{}% supress warning
 \usepackage{booktabs}
+\usepackage{lipsum}
 
 \pgfkeys{/pgf/number format/.cd,fixed,precision=5}
 
@@ -34,7 +34,7 @@
 
 \begin{document}
 \maketitle
-
+\begin{comment}
 \begin{abstract}
     El reconocimiento y clasificación de caracteres impresos es un método
     conocido para la digitalización de texto, de modo de poder realizar el
@@ -49,7 +49,7 @@
     obtenidos en el caso de agregar mecanismos de división espacial en la
     obtención de los descriptores, buscando comparar el comportamiento de éstos.
 \end{abstract}
-
+\end{comment}
 \section{Introducción}
 
 %> grandes data sets (WWW) hacen posible soportar simples, eficientes algoritmos de aprendizaje.
@@ -59,26 +59,28 @@
 % analizamos la performance de MoG en el reconocimiento de piel en un set de 30 imagenes sacadas de la web
 
 La masificación en el uso de la World Wide Web ha contribuido en la aparición de
-grandes conjuntos de datos. La masividad de datos disponible soprta la aparición
-de algoritmos simples y computacionalmente eficientes.Las grandes colecciones de
-imágenes on-line permiten la construcción de modelos estadísticos,
-caracterizando la apariencia de una imagen utilizando la información de sus
-pixeles.
+grandes conjuntos de datos. La masividad de datos disponible soporta la
+aparición de algoritmos simples y computacionalmente eficientes. Las grandes
+colecciones de imágenes on-line permiten la construcción de modelos
+estadísticos, caracterizando la apariencia de una imagen a través de la
+información de sus pixeles.
 
 La segmentación de piel es una aplicación útil del reconocimiento de patrones.
 Es utilizada en el campo de la detección de personas y rostros, generalmente
 para discriminar ambigüedades en la detección y reducir malas clasificaciones.
-En el ámbito de la seguirdad, ha sido usada en programas de control parental,
+En el ámbito de la seguridad, ha sido usada en programas de control parental,
 como herramienta de detección de contenido adulto en la web.
 
 Estudiamos el segmentador de piel probabilístico propuesto por \emph{Jones y
-Rehg} en \emph{Statistical color models with application to skin detection}. En
-particular analizamos el desempeño del método \emph{Mixture of Gaussians}, al
-variar la razón de costo asociado a los falsos positivos y falsos negativos.
+Rehg} en \emph{Statistical color models with application to skin
+detection}\cite{skin}. En particular analizamos el desempeño del método
+\emph{Mixture of Gaussians}, al variar la razón de costo asociado a los falsos
+positivos y falsos negativos ($\Theta$).
 
 Utilizamos un set de datos de treinta imágenes, de las cuales la mitad fueron
 encontradas en internet seleccionadas, considerando la tez de los sujetos. La
-segunda mitad consiste en imágenes extraidas del dataset Pratheepan.
+segunda mitad consiste en imágenes extraidas del dataset Pratheepan
+\cite{dataset}.
 
 \section{Descripción del Trabajo}
 
@@ -149,7 +151,7 @@ del modelo estadístico.
     \subcaptionbox{Imagen del \emph{dataset}
     utilizado.}{\includegraphics[scale=0.9]{../images/nonbin/12.png}}
     \subcaptionbox{Perfil de piel utilizado como \emph{ground
-    truth}.}{\includegraphics[scale=0.9]{../images/bin/12.png}}
+    truth}}{\includegraphics[scale=0.9]{../images/bin/12.png}}
     \caption{Ejemplo del \emph{dataset} usado.}
 \end{figure}
 
@@ -180,7 +182,7 @@ Se definen, en este contexto:
 
 Así, el comportamiento de un modelo de detección como el estudiado puede ser
 apreciado al comparar el comportamiento de la $FPR$ versus la $TPR$. La curva
-definida por estas dos variables al variar un tercer parámetro se denomina curva
+definida por estas dos variables al modificar un tercer parámetro se denomina curva
 ROC (del inglés \emph{receiver operating characteristic}). Esta curva muestra
 cuán apropiado puede ser un modelo o algoritmo para ciertas aplicaciones, ya que
 el costo de un falso positivo versus un verdadero positivo varía dependiendo del
@@ -204,8 +206,8 @@ de gaussianas en el dataset generado y la posterior comparación con la
 %	legend entries={$0.01$ , $0.1$,$0.5$},
 %	legend style={at={(0,1)},anchor=north west},
 ]
-\addplot table [only marks,scatter,x={FP}, y={TP}]{results.csv};
-%\addplot table [only marks,scatter,x={FP}, y={TP}]{results(0.1,1,0.1).csv};
+\addplot table [scatter,x={FP}, y={TP}]{results.csv};
+%\addplot table [only marks,scatter,x={FP}, y={TP}]{poop.csv};
 %\addplot table [only marks,scatter,x={FP}, y={TP}]{results(0.1,1,0.5).csv};
 \end{axis}
 \end{tikzpicture}
@@ -266,7 +268,25 @@ herramientas depende del contexto de uso.
 
 \section{Conclusiones}
 
+%Observamos que nuestros resultados son peores que los de "la gente del papaer"
 
+%creemos que los resultados mejorarian de agregar imagenes sin piel que detectar
+
+%las imagenes que elegimos estan sucias: colores de fondo. -> fallan tanto
+
+Se observa un peor desempeño de \emph{Mixture of Gaussians} sobre el conjunto de datos construido, que el obtenido por \emph{Jones y Rehg}.
+Se atribuye el desempeño pobre a la selección de imágenes. Se observa del output de \emph{MoG} que aquellas imágenes en las que el fondo
+presenta colores similares a la piel, es clasificado erróneamente. El fondo es mal etiquetado en imágenes con mala iluminación o de poca calidad.
+En el otro extremo, imágenes con iluminación exscesiva o coloreada fallan considerablemente, esta vez fallando en reconocer piel. 
+
+Se estima probable que agregar imágenes iluminadas, de buena calidad e incluso imágenes en las que no hay presencia de piel contribuirían
+a mejorar el desempeño de \emph{MoG} en un dataset de poco tamaño.
+
+
+
+
+
+%\lipsum[1]
 
 \selectlanguage{spanish}
 \selectbiblanguage{spanish}
