@@ -131,13 +131,12 @@ obtuvo una imagen que identifica las zonas que son piel, generándose así la
 \emph{ground truth} contra la que se comparó el rendimiento del modelo
 estadístico.
 
-
 \begin{figure}[h]
     \centering
     \hfill\subcaptionbox{Imagen del \emph{dataset}
-    utilizado.}{\includegraphics[scale=0.5]{06}}
+    utilizado.}{\includegraphics[scale=0.9]{../images/nonbin/12.png}}
     \hfill\subcaptionbox{Perfil de piel utilizado como \emph{ground
-    truth}}{\includegraphics[scale=0.5]{06b}}
+    truth}}{\includegraphics[scale=0.9]{../images/bin/12.png}}
     \caption{Ejemplo del \emph{dataset} usado.}
 \end{figure}
 
@@ -189,12 +188,12 @@ de gaussianas en el dataset generado y la posterior comparación con la
 	xlabel={False Positive Rate},
 	ylabel={True Positive Rate},
 	grid=major,
-	legend entries={$0.01$ , $0.1$,$0.5$},
-	legend style={at={(0,1)},anchor=north west},
+%	legend entries={$0.01$ , $0.1$,$0.5$},
+%	legend style={at={(0,1)},anchor=north west},
 ]
-\addplot table [only marks,scatter,x={FP}, y={TP}]{results(0.9,1,0.01).csv};
-\addplot table [only marks,scatter,x={FP}, y={TP}]{results(0.1,1,0.1).csv};
-\addplot table [only marks,scatter,x={FP}, y={TP}]{results(0.1,1,0.5).csv};
+\addplot table [only marks,scatter,x={FP}, y={TP}]{results.csv};
+%\addplot table [only marks,scatter,x={FP}, y={TP}]{results(0.1,1,0.1).csv};
+%\addplot table [only marks,scatter,x={FP}, y={TP}]{results(0.1,1,0.5).csv};
 \end{axis}
 \end{tikzpicture}
     \caption{Curva ROC obtenida al variar el parámetro umbral $\Theta$ entre los
@@ -207,7 +206,14 @@ efectividad.
 
 \begin{figure}[h]
     \centering
-   % \includegraphics{digit}
+   \hfill\subcaptionbox{Imagen del \emph{dataset}
+    utilizado.}{\includegraphics[scale=0.5]{../images/nonbin/05.png}}
+   \hfill\subcaptionbox{Imagen del \emph{dataset}
+    utilizado.}{\includegraphics[scale=0.5]{../images/bin/05.png}}
+   \hfill\subcaptionbox{Imagen del \emph{dataset}
+    utilizado.}{\includegraphics[scale=0.5]{../done0.5/05.png}}
+   \hfill\subcaptionbox{Imagen del \emph{dataset}
+    utilizado.}{\includegraphics[scale=0.5]{../done0.9/05.png}}
     \caption{A la izquierda, imágenes del dataset. En el centro, la \emph{ground
     truth} correspondiente. A la derecha, el resultado obtenido por el modelo de
     mezcla de gaussianas.}
@@ -235,6 +241,6 @@ herramientas depende del contexto de uso.
 
 \bibliography{./informe}
 
-\include{appendix}
+%\include{appendix}
 
 \end{document} 
