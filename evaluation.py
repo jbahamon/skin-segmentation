@@ -278,11 +278,13 @@ if __name__ == '__main__':
     # cv2.waitKey(0)
     # cv2.destroyAllWindows()
 
-    num_images = 30
-    thetas = np.concatenate((np.arange(0.1, 0.9, 0.1), np.arange(0.9, 1, 0.01)))
+    #num_images = 30
+    #thetas = np.concatenate((np.arange(0.1, 0.9, 0.1), np.arange(0.9, 1, 0.01)))
 
-    points = roc_curve(num_images, thetas)
+#    points = roc_curve(num_images, thetas)
 
-    for pair in points:
-        print pair
+ #   for pair in points:
+  #      print pair
 
+    cv2.imwrite("02.png",mix_of_gaussians(cv2.imread("images/nonbin/02.png"),0.2))
+    cv2.imwrite("17.png",mix_of_gaussians(cv2.imread("images/nonbin/17.png"),0.9))

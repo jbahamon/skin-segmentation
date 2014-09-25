@@ -207,6 +207,8 @@ de gaussianas en el dataset generado y la posterior comparación con la
 %	legend style={at={(0,1)},anchor=north west},
 ]
 \addplot table [scatter,x={FP}, y={TP}]{results.csv};
+\addplot[] coordinates {(0.4531306806,0.9519680824)} node[pin=180:{\small{$\Theta=0.1$}}]{} ;
+\addplot[] coordinates {(0.2353584979,0.8896142046)} node[pin=0:{\small{$\Theta=0.99$}}]{} ;
 %\addplot table [only marks,scatter,x={FP}, y={TP}]{poop.csv};
 %\addplot table [only marks,scatter,x={FP}, y={TP}]{results(0.1,1,0.5).csv};
 \end{axis}
@@ -280,18 +282,12 @@ clasificación es errónea. El fondo suele ser mal etiquetado en imágenes con m
 iluminación o de poca calidad. En el otro extremo, imágenes con iluminación
 coloreada fallan considerablemente, esta vez fallando en detectar piel. 
 
-Se estima probable que agregar imágenes iluminadas, de buena calidad e incluso
+Es  probable que agregar imágenes iluminadas, de buena calidad e incluso
 imágenes en las que no hay presencia de piel, contribuirían a mejorar el
 desempeño de \emph{MoG} en un dataset de poco tamaño.
 
-A pesar de sus limitaciones, \emph{MoG} resulta útil como herramienta para la
-depuración de ambigüedades en métodos más complejos de detección de rostros y de
-personas. Esto ya que, una vez detectada una ambigüedad, es posible realizar
-\emph{MoG} sobre la zona en cuestión y discriminar a partir de la presencia de
-piel.
-
-Por otro lado, se aprecia que existen diferentes tipos de error. En ciertos
-casos, existen muchos pixeles dispersos detectados como piel esparcidos por la
+A parte de los recién nombrados, se aprecia que existen diferentes tipos de error. En ciertos
+casos, existen muchos pixeles detectados como piel  esparcidos por la
 imagen. En este caso, aplicar algún mecanismo de detección de \emph{blobs}
 podría ayudar a descartar este tipo de errores. Otros casos corresponden a la
 identificación de ciertas telas y texturas como piel, en los que complementar
@@ -299,6 +295,11 @@ con técnicas como \emph{local binary patterns} podrían ayudar a un mejor
 desempeño. De todos modos, la conveniencia de complementar el modelo con estas
 herramientas depende del contexto de uso.
 
+A pesar de sus limitaciones, \emph{MoG} resulta útil como herramienta para la
+depuración de ambigüedades en métodos más complejos de detección de rostros y de
+personas. Esto ya que, una vez detectada una ambigüedad, es posible realizar
+\emph{MoG} sobre la zona en cuestión y discriminar a partir de la presencia de
+piel.
 
 \selectlanguage{spanish}
 \selectbiblanguage{spanish}
