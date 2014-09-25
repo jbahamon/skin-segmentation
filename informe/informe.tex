@@ -260,14 +260,6 @@ cuando el fondo es más bien simple, logrando, por el contrario, un mejor
 comportamiento en casos en los que el fondo posee elementos rojizos (como
 madera, por ejemplo). 
 
-Por otro lado, se aprecia que existen diferentes tipos de error. En ciertos
-casos, existen muchos pixeles dispersos detectados como piel esparcidos por la
-imagen. En este caso, aplicar algún mecanismo de detección de \emph{blobs}
-podría ayudar a descartar este tipo de errores. Otros casos corresponden a la
-identificación de ciertas telas y texturas como piel, en los que complementar
-con técnicas como \emph{local binary patterns} podrían ayudar a un mejor
-desempeño. De todos modos, la conveniencia de complementar el modelo con estas
-herramientas depende del contexto de uso.
 
 \section{Conclusiones}
 
@@ -277,13 +269,35 @@ herramientas depende del contexto de uso.
 
 %las imagenes que elegimos estan sucias: colores de fondo. -> fallan tanto
 
-Se observa un peor desempeño de \emph{Mixture of Gaussians} sobre el conjunto de datos construido, que el obtenido por \emph{Jones y Rehg}.
-Se atribuye el desempeño pobre a la selección de imágenes. Se observa del output de \emph{MoG} que aquellas imágenes en las que el fondo
-presenta colores similares a la piel, es clasificado erróneamente. El fondo es mal etiquetado en imágenes con mala iluminación o de poca calidad.
-En el otro extremo, imágenes con iluminación exscesiva o coloreada fallan considerablemente, esta vez fallando en reconocer piel. 
+Se observa un peor desempeño de \emph{Mixture of Gaussians} sobre el conjunto de
+datos construido, que el obtenido por \emph{Jones y Rehg}.  Se atribuye el bajo
+desempeño a la selección de imágenes que constituyen el data set. 
 
-Se estima probable que agregar imágenes iluminadas, de buena calidad e incluso imágenes en las que no hay presencia de piel contribuirían
-a mejorar el desempeño de \emph{MoG} en un dataset de poco tamaño.
+Bajo condiciones de iluminación normales, el algorítmo presenta una alta
+sensibilidad y una baja especificidad.  Se observa del output de \emph{MoG}, que
+aquellas imágenes en las que el fondo presenta colores similares a la piel, la
+clasificación es errónea. El fondo suele ser mal etiquetado en imágenes con mala
+iluminación o de poca calidad. En el otro extremo, imágenes con iluminación
+coloreada fallan considerablemente, esta vez fallando en detectar piel. 
+
+Se estima probable que agregar imágenes iluminadas, de buena calidad e incluso
+imágenes en las que no hay presencia de piel, contribuirían a mejorar el
+desempeño de \emph{MoG} en un dataset de poco tamaño.
+
+A pesar de sus limitaciones, \emph{MoG} resulta útil como herramienta para la
+depuración de ambigüedades en métodos más complejos de detección de rostros y de
+personas. Esto ya que, una vez detectada una ambigüedad, es posible realizar
+\emph{MoG} sobre la zona en cuestión y discriminar a partir de la presencia de
+piel.
+
+Por otro lado, se aprecia que existen diferentes tipos de error. En ciertos
+casos, existen muchos pixeles dispersos detectados como piel esparcidos por la
+imagen. En este caso, aplicar algún mecanismo de detección de \emph{blobs}
+podría ayudar a descartar este tipo de errores. Otros casos corresponden a la
+identificación de ciertas telas y texturas como piel, en los que complementar
+con técnicas como \emph{local binary patterns} podrían ayudar a un mejor
+desempeño. De todos modos, la conveniencia de complementar el modelo con estas
+herramientas depende del contexto de uso.
 
 
 \selectlanguage{spanish}
